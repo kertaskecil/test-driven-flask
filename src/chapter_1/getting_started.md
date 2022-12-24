@@ -48,10 +48,13 @@ Create `Route` helper class in `http` package inside our `app`
 ```python
 # app/http/route.py
 
-from typing import List, Optional, Type
+from __future__ import annotations
 
-from flask.views import View
+from typing import List, Optional, Type, Union
+
+from flask import Blueprint
 from flask.typing import RouteCallable
+from flask.views import View
 
 
 class Route:
@@ -93,6 +96,22 @@ class Route:
     @classmethod
     def delete(cls, url_rule: str, view: Type[View], name_alias: Optional[str] = None):
         return cls(url_rule=url_rule, view=view, method="DELETE", name_alias=name_alias)
+
+    @staticmethod
+    def group(url_prefix_group: str, routes: List[Union[Route, Blueprint]], **kwargs):
+        name = kwargs.pop("name", None) or url_prefix_group.replace("/", "")
+        url_prefix = kwargs.pop("url_prefix", None) or url_prefix_group
+        blueprint = Blueprint(name, __name__, url_prefix=url_prefix, **kwargs)
+
+        for route in routes:
+            if isinstance(route, Blueprint):
+                blueprint.register_blueprint(route)
+            else:
+                blueprint.add_url_rule(
+                    route.url_rule, view_func=route.view_func(), methods=route.methods()
+                )
+
+        return blueprint
 
 ```
 
@@ -136,22 +155,27 @@ Then we can create `factory.py` file inside app directory
 ```python
 # app/factory.py
 
-from typing import List, Type
+from typing import List, Type, Union
 
-from flask import Flask
+from flask import Blueprint, Flask
 
 from app.config import Config
 from app.http.route import Route
 
 
-def create_app(app_name: str, config: Type[Config], routes: List[Route]):
+def create_app(
+    app_name: str, config: Type[Config], routes: List[Union[Route, Blueprint]]
+):
     app = Flask(app_name)
     app.config.from_object(config)
 
     for route in routes:
-        app.add_url_rule(
-            route.url_rule, view_func=route.view_func(), methods=route.methods()
-        )
+        if isinstance(route, Blueprint):
+            app.register_blueprint(route)
+        else:
+            app.add_url_rule(
+                route.url_rule, view_func=route.view_func(), methods=route.methods()
+            )
 
     return app
 
@@ -183,7 +207,7 @@ from app.http.route import Route
 from app.views.main_api import MainView
 
 api_routes = [
-    Route.get("/", MainView)
+    Route.get("/", MainView),
 ]
 
 ```

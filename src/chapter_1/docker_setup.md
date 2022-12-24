@@ -4,7 +4,7 @@
 
 Let's put our application inside docker container
 
-## Setup
+## Setup Application Container
 
 Create `Dockerfile` in our project directory
 
