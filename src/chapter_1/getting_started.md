@@ -250,10 +250,11 @@ flask-todo
 │   └── views
 │       ├── __init__.py
 │       └── main_api.py
+├── .gitignore
 ├── requirements.txt
 └── serve.py
 
-4 directories, 11 files
+4 directories, 12 files
 ```
 
 We can commit our works before continuing to next chapter.
