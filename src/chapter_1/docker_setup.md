@@ -57,7 +57,7 @@ services:
 
 Create file `.env.dev` to add env based configuration
 ```env
-FLASK_ENV=development
+APP_ENV=development
 ```
 
 Before build our image, we should add slight changes to our `serve.py`

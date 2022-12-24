@@ -147,7 +147,7 @@ def get_config():
         "development": DevelopmentConfig,
         "testing": TestingConfig,
     }
-    env = os.getenv("FLASK_ENV", "development")
+    env = os.getenv("APP_ENV", "development")
     return config.get(env, DevelopmentConfig)
 ```
 
