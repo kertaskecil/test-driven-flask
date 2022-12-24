@@ -1,0 +1,6 @@
+[book]
+authors = ["Ngalim Siregar"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Test Driven Development with Flask and SQLAlchemy"
