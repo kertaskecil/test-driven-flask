@@ -10,3 +10,6 @@
     - [List ToDo API](./chapter_2/list_todo_api.md)
     - [Detail ToDo API](./chapter_2/detail_todo_api.md)
     - [Update ToDo API](./chapter_2/update_todo_api.md)
+    - [Delete ToDo API](./chapter_2/delete_todo_api.md)
+- [Review](./review.md)
+- [About](./about.md)

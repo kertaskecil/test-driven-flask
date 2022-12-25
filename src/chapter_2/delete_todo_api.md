@@ -1,10 +1,10 @@
-# Update ToDo API
+# Delete ToDo API
 
-In this chapter we will create endpoint `/api/todos/{:id}` to update our `Task` model
+In this chapter we will create endpoint `/api/todos/{:id}` to delete specific `Task`
 
 ## Write the Test
 
-Write test at `tests/features/task/update_task_api_test.py`
+Write our test at `tests/features/task/delete_task_api_test.py`
 ```python
 from http import HTTPStatus
 from tests.base import BaseAPITestCase
@@ -12,8 +12,8 @@ from app.tasks.models.task import Task
 from app.factory import db
 
 
-class UpdateTaskAPITest(BaseAPITestCase):
-    def test_update_task(self):
+class DeleteTaskAPITest(BaseAPITestCase):
+    def test_delete_task(self):
         endpoint = "/api/todos"
         task = Task(name="Buy groceries")
         db.session.add(task)
@@ -21,81 +21,64 @@ class UpdateTaskAPITest(BaseAPITestCase):
 
         db.session.refresh(task)
 
-        json_data = {
-            "name": "Buy milk",
-            "completed": True,
-        }
-        resp = self.client.post(
-            f"{endpoint}/{task.id}",
-            json=json_data
-        )
-        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        resp = self.client.delete(f"{endpoint}/{task.id}")
+        self.assertEqual(resp.status_code, HTTPStatus.NO_CONTENT)
 
-        resp_json = resp.json or dict()
-        data = resp_json["data"]
-        self.assertEqual(data["name"], "Buy milk")
-        self.assertEqual(data["completed"], True)
+        tasks = Task.query.all()
+        self.assertEqual(len(tasks), 0)
 
         Task.query.delete()
         db.session.commit()
 ```
 
-Run our test
+Run the test
 ```bash
-$ bin/test tests/features/task/update_task_api_test.py
+$ bin/test tests/features/task/delete_task_api_test.py
 ```
 
-It will error
+It should fail
 ```
 F
 ======================================================================
-FAIL: test_update_task (tests.features.task.update_task_api_test.UpdateTaskAPITest)
+FAIL: test_delete_task (tests.features.task.delete_task_api_test.DeleteTaskAPITest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/usr/src/app/tests/features/task/update_task_api_test.py", line 24, in test_update_task
-    self.assertEqual(resp.status_code, HTTPStatus.OK)
-AssertionError: 405 != <HTTPStatus.OK: 200>
+  File "/usr/src/app/tests/features/task/delete_task_api_test.py", line 17, in test_delete_task
+    self.assertEqual(resp.status_code, HTTPStatus.NO_CONTENT)
+AssertionError: 405 != <HTTPStatus.NO_CONTENT: 204>
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.032s
+Ran 1 test in 0.033s
 
 FAILED (failures=1)
 ```
 
-Let's implement our view at `app/tasks/views/update_task_api.py`
+Create our view at `app/tasks/views/delete_task_api.py`
 ```python
 from http import HTTPStatus
 
-from flask import jsonify, make_response, request
 from flask.typing import ResponseReturnValue
 from flask.views import View
 
 from app.factory import db
 from app.tasks.models.task import Task
-from app.tasks.schemas.task_schema import TaskSchema
 
 
-class UpdateTaskAPI(View):
+class DeleteTaskAPI(View):
     def dispatch_request(self, task_id) -> ResponseReturnValue:
-        task_schema = TaskSchema()
-        json_data = request.get_json() or dict()
-
         task = Task.query.filter(
             Task.id == task_id
         ).first()
 
-        task.query.update(json_data)
+        db.session.delete(task)
         db.session.commit()
-
-        resp = {
-            "data": task_schema.dump(task)
-        }
-        return jsonify(resp), HTTPStatus.OK
+        return "", HTTPStatus.NO_CONTENT
 ```
 
 Update our routes to
 ```python
 from app.http.route import Route
+from app.tasks.views.delete_task_api import DeleteTaskAPI
 from app.tasks.views.detail_task_api import DetailTaskAPI
 from app.tasks.views.list_task_api import ListTaskAPI
 from app.tasks.views.create_task_api import CreateTaskAPI
@@ -109,51 +92,56 @@ api_routes = [
         Route.get("/todos", view=ListTaskAPI),
         Route.get("/todos/<task_id>", view=DetailTaskAPI),
         Route.put("/todos/<task_id>", view=UpdateTaskAPI),
+        Route.delete("/todos/<task_id>", view=DeleteTaskAPI),
     ]),
 ]
 ```
 
 Re-run the test
 ```bash
-$ bin/test tests/features/task/update_task_api_test.py
+$ bin/test tests/features/task/delete_task_api_test.py
 ```
 
 It should pass
 ```
 .
 ----------------------------------------------------------------------
-Ran 1 test in 0.041s
+Ran 1 test in 0.038s
 
 OK
 ```
 
-Let's add test when updated `Task` does not exists
+Let's add test when target id does not exists
 ```python
     ...
-    def test_update_task_when_id_not_exists(self):
-    endpoint = "/api/todos"
-    json_data = {
-        "name": "Buy milk tea",
-    }
-    resp = self.client.put(f"{endpoint}/123", json=json_data)
-    self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
+    def test_delete_task_when_id_not_exists(self):
+        endpoint = "/api/todos"
+        resp = self.client.delete(f"{endpoint}/123")
+        self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
 ```
 
 Re-run the test
 ```bash
-$ bin/test tests/features/task/update_task_api_test.py
+$ bin/test tests/features/task/delete_task_api_test.py
 ```
 
 It should fail
 ```
 .E
 ======================================================================
-ERROR: test_update_task_when_id_not_exists (tests.features.task.update_task_api_test.UpdateTaskAPITest)
+ERROR: test_delete_task_when_id_not_exists (tests.features.task.delete_task_api_test.DeleteTaskAPITest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/usr/src/app/tests/features/task/update_task_api_test.py", line 39, in test_update_task_when_id_not_exists
-    resp = self.client.put(f"{endpoint}/123", json=json_data)
-  File "/usr/local/lib/python3.8/site-packages/werkzeug/test.py", line 1150, in put
+  File "/usr/local/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2700, in delete
+    state = attributes.instance_state(instance)
+AttributeError: 'NoneType' object has no attribute '_sa_instance_state'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/src/app/tests/features/task/delete_task_api_test.py", line 27, in test_delete_task_when_id_not_exists
+    resp = self.client.delete(f"{endpoint}/123")
+  File "/usr/local/lib/python3.8/site-packages/werkzeug/test.py", line 1155, in delete
     return self.open(*args, **kw)
   File "/usr/local/lib/python3.8/site-packages/flask/testing.py", line 223, in open
     response = super().open(
@@ -177,167 +165,67 @@ Traceback (most recent call last):
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
   File "/usr/local/lib/python3.8/site-packages/flask/views.py", line 107, in view
     return current_app.ensure_sync(self.dispatch_request)(**kwargs)
-  File "/usr/src/app/app/tasks/views/update_task_api.py", line 28, in dispatch_request
-    task.query.update(json_data)
-AttributeError: 'NoneType' object has no attribute 'query'
+  File "/usr/src/app/app/tasks/views/delete_task_api.py", line 16, in dispatch_request
+    db.session.delete(task)
+  File "<string>", line 2, in delete
+  File "/usr/local/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2702, in delete
+    util.raise_(
+  File "/usr/local/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+sqlalchemy.orm.exc.UnmappedInstanceError: Class 'builtins.NoneType' is not mapped
 
-----------------------------------------------------------------------
-Ran 2 tests in 0.057s
-
-FAILED (errors=1)
-```
-
-Fix our implementation to
-```python
-from http import HTTPStatus
-
-from flask import jsonify, make_response, request
-from flask.typing import ResponseReturnValue
-from flask.views import View
-
-from app.factory import db
-from app.tasks.models.task import Task
-from app.tasks.schemas.task_schema import TaskSchema
-
-
-class UpdateTaskAPI(View):
-    def dispatch_request(self, task_id) -> ResponseReturnValue:
-        task_schema = TaskSchema()
-        json_data = request.get_json() or dict()
-
-        task = Task.query.filter(
-            Task.id == task_id
-        ).first_or_404()
-
-        task.query.update(json_data)
-        db.session.commit()
-
-        resp = {
-            "data": task_schema.dump(task)
-        }
-        return jsonify(resp), HTTPStatus.OK
-```
-
-Re-run the test
-```bash
-$ bin/test tests/features/task/update_task_api_test.py
-```
-
-It should pass
-```
-..
 ----------------------------------------------------------------------
 Ran 2 tests in 0.056s
 
-OK
-```
-
-Add more test to validate json schema
-```python
-    ...
-    def test_update_task_when_required_payload_empty(self):
-        endpoint = "/api/todos"
-        task = Task(name="Buy groceries")
-        db.session.add(task)
-        db.session.commit()
-
-        db.session.refresh(task)
-
-        json_data = {}
-        resp = self.client.put(
-            f"{endpoint}/{task.id}",
-            json=json_data
-        )
-        self.assertEqual(resp.status_code, HTTPStatus.BAD_REQUEST)
-
-        Task.query.delete()
-        db.session.commit()
-```
-
-Re-run the test
-```bash
-$ bin/test tests/features/task/update_task_api_test.py
-```
-
-It should fail
-```
-..F
-======================================================================
-FAIL: test_update_task_when_required_payload_empty (tests.features.task.update_task_api_test.UpdateTaskAPITest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/usr/src/app/tests/features/task/update_task_api_test.py", line 55, in test_update_task_when_required_payload_empty
-    self.assertEqual(resp.status_code, HTTPStatus.BAD_REQUEST)
-AssertionError: 200 != <HTTPStatus.BAD_REQUEST: 400>
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.074s
-
-FAILED (failures=1)
+FAILED (errors=1)
 ```
 
 Update our implementation to
 ```python
 from http import HTTPStatus
 
-from flask import jsonify, make_response, request
 from flask.typing import ResponseReturnValue
 from flask.views import View
 
 from app.factory import db
 from app.tasks.models.task import Task
-from app.tasks.schemas.task_schema import TaskSchema
 
 
-class UpdateTaskAPI(View):
+class DeleteTaskAPI(View):
     def dispatch_request(self, task_id) -> ResponseReturnValue:
-        task_schema = TaskSchema()
-
-        json_data = request.get_json() or dict()
-        errors = task_schema.validate(json_data)
-        if errors:
-            return make_response(
-                jsonify(errors=str(errors)),
-                HTTPStatus.BAD_REQUEST
-            )
-
         task = Task.query.filter(
             Task.id == task_id
         ).first_or_404()
 
-        task.query.update(json_data)
+        db.session.delete(task)
         db.session.commit()
-
-        resp = {
-            "data": task_schema.dump(task)
-        }
-        return jsonify(resp), HTTPStatus.OK
+        return "", HTTPStatus.NO_CONTENT
 ```
 
 Re-run the test
 ```bash
-$ bin/test tests/features/task/update_task_api_test.py
+$ bin/test tests/features/task/delete_task_api_test.py
 ```
 
 It should pass
 ```
-...
+..
 ----------------------------------------------------------------------
-Ran 3 tests in 0.072s
+Ran 2 tests in 0.057s
 
 OK
 ```
 
-Let's re-run all of our tests
+Re-run all test to ensure our new feature not breaking existing feature
 ```bash
 $ bin/test discover -s tests -p '*_test.py'
 ```
 
-It should pass
+It should pass all tests
 ```
-..........
+............
 ----------------------------------------------------------------------
-Ran 10 tests in 0.186s
+Ran 12 tests in 0.233s
 
 OK
 ```
@@ -365,6 +253,7 @@ flask-todo
 │   │   │   └── task_schema.py
 │   │   └── views
 │   │       ├── create_task_api.py
+│   │       ├── delete_task_api.py
 │   │       ├── detail_task_api.py
 │   │       ├── __init__.py
 │   │       ├── list_task_api.py
@@ -397,6 +286,7 @@ flask-todo
     │   ├── __init__.py
     │   └── task
     │       ├── create_task_api_test.py
+    │       ├── delete_task_api_test.py
     │       ├── detail_task_api_test.py
     │       ├── __init__.py
     │       ├── list_task_api_test.py
@@ -408,12 +298,12 @@ flask-todo
             ├── __init__.py
             └── task_model_test.py
 
-17 directories, 45 files
+17 directories, 47 files
 ```
 
 We can commit our works before continuing to next chapter.
 
 ```bash
 (venv)$ git add .
-(venv)$ git commit -m "Create UpdateTaskAPI endpoint"
+(venv)$ git commit -m "Create DeleteTaskAPI endpoint"
 ```

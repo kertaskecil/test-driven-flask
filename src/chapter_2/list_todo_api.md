@@ -2,7 +2,7 @@
 
 In this chapter we will create endpoint `/api/todos` to list all created `Task` in our database.
 
-## Writing Tests
+## Write the Test
 
 First let's create test at `tests/features/task/list_task_api_test.py`
 ```python

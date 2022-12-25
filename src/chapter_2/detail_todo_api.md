@@ -2,7 +2,7 @@
 
 In this chapter we will create endpoint `/api/todos/{:id}` to get detail about specific `Task`
 
-## Writing Tests
+## Write the Test
 
 Write test at `tests/features/task/detail_task_api_test.py`
 ```python
