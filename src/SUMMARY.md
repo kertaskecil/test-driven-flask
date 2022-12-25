@@ -8,3 +8,4 @@
 - [Chapter 2](./chapter_2/SUMMARY.md)
     - [Create ToDo API](./chapter_2/create_todo_api.md)
     - [List ToDo API](./chapter_2/list_todo_api.md)
+    - [Detail ToDo API](./chapter_2/detail_todo_api.md)
