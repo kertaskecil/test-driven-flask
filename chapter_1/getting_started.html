@@ -1,0 +1,434 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Getting Started - Test Driven Development with Flask and SQLAlchemy</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../favicon.svg">
+                        <link rel="shortcut icon" href="../favicon.png">
+                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+                <link rel="stylesheet" href="../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../chapter_1/SUMMARY.html"><strong aria-hidden="true">2.</strong> Chapter 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_1/getting_started.html" class="active"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../chapter_1/docker_setup.html"><strong aria-hidden="true">2.2.</strong> Docker Setup</a></li><li class="chapter-item expanded "><a href="../chapter_1/postgresql_setup.html"><strong aria-hidden="true">2.3.</strong> PostgreSQL Setup</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_2/SUMMARY.html"><strong aria-hidden="true">3.</strong> Chapter 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/create_todo_api.html"><strong aria-hidden="true">3.1.</strong> Create ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/list_todo_api.html"><strong aria-hidden="true">3.2.</strong> List ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/detail_todo_api.html"><strong aria-hidden="true">3.3.</strong> Detail ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/update_todo_api.html"><strong aria-hidden="true">3.4.</strong> Update ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/delete_todo_api.html"><strong aria-hidden="true">3.5.</strong> Delete ToDo API</a></li></ol></li><li class="chapter-item expanded "><a href="../review.html"><strong aria-hidden="true">4.</strong> Review</a></li><li class="chapter-item expanded "><a href="../about.html"><strong aria-hidden="true">5.</strong> About</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Test Driven Development with Flask and SQLAlchemy</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<p>In this chapter we'll setup basic structure for our projects to help our test driven development flow.</p>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<p>Create new project and requirements with</p>
+<pre><code class="language-bash">$ mkdir flask-todo
+$ cd flask-todo
+</code></pre>
+<p>We need to initialize our project directory as git repository with command</p>
+<pre><code class="language-bash">$ git init
+</code></pre>
+<p>Then we'll use python virtual environment to keep dependencies required by our projects isolated.</p>
+<pre><code class="language-bash">$ python -m venv venv
+$ source venv/bin/activate
+</code></pre>
+<p>After activating python virtual environment, install required package</p>
+<pre><code class="language-bash">(venv)$ pip install flask==2.2.2
+</code></pre>
+<p>To save our project dependencies we can create <code>requirements.txt</code> containing</p>
+<pre><code class="language-txt">Flask==2.2.2
+</code></pre>
+<p>Create <code>app</code> package inside our project directory with command</p>
+<pre><code class="language-bash">(venv)$ mkdir app
+(venv)$ touch app/__init__.py
+</code></pre>
+<p>Create <code>Route</code> helper class in <code>http</code> package inside our <code>app</code></p>
+<pre><code class="language-bash">(venv)$ mkdir app/http
+(venv)$ touch app/http/__init__.py
+</code></pre>
+<pre><code class="language-python"># app/http/route.py
+
+from __future__ import annotations
+
+from typing import List, Optional, Type, Union
+
+from flask import Blueprint
+from flask.typing import RouteCallable
+from flask.views import View
+
+
+class Route:
+    def __init__(
+        self,
+        url_rule: str,
+        view: Type[View],
+        method: Optional[str] = None,
+        name_alias: Optional[str] = None,
+    ) -&gt; None:
+        self.url_rule = url_rule
+        self.view = view
+        self.method = method
+        self.name_alias = name_alias
+
+    def view_func(self) -&gt; RouteCallable:
+        view_name = self.name_alias or self.view.__name__
+        return self.view.as_view(view_name)
+
+    def methods(self) -&gt; List[str]:
+        if self.method is None:
+            methods = getattr(self.view, &quot;methods&quot;, None) or (&quot;GET&quot;,)
+        else:
+            methods = [self.method]
+        return methods
+
+    @classmethod
+    def get(cls, url_rule: str, view: Type[View], name_alias: Optional[str] = None):
+        return cls(url_rule=url_rule, view=view, method=&quot;GET&quot;, name_alias=name_alias)
+
+    @classmethod
+    def post(cls, url_rule: str, view: Type[View], name_alias: Optional[str] = None):
+        return cls(url_rule=url_rule, view=view, method=&quot;POST&quot;, name_alias=name_alias)
+
+    @classmethod
+    def put(cls, url_rule: str, view: Type[View], name_alias: Optional[str] = None):
+        return cls(url_rule=url_rule, view=view, method=&quot;PUT&quot;, name_alias=name_alias)
+
+    @classmethod
+    def delete(cls, url_rule: str, view: Type[View], name_alias: Optional[str] = None):
+        return cls(url_rule=url_rule, view=view, method=&quot;DELETE&quot;, name_alias=name_alias)
+
+    @staticmethod
+    def group(url_prefix_group: str, routes: List[Union[Route, Blueprint]], **kwargs):
+        name = kwargs.pop(&quot;name&quot;, None) or url_prefix_group.replace(&quot;/&quot;, &quot;&quot;)
+        url_prefix = kwargs.pop(&quot;url_prefix&quot;, None) or url_prefix_group
+        blueprint = Blueprint(name, __name__, url_prefix=url_prefix, **kwargs)
+
+        for route in routes:
+            if isinstance(route, Blueprint):
+                blueprint.register_blueprint(route)
+            else:
+                blueprint.add_url_rule(
+                    route.url_rule, view_func=route.view_func(), methods=route.methods()
+                )
+
+        return blueprint
+
+</code></pre>
+<p>To isolate our application configuration create <code>Config</code> object inside our <code>app</code></p>
+<pre><code class="language-python"># app/config.py
+
+import os
+from functools import lru_cache
+
+
+class Config:
+    DEBUG = False
+
+
+class ProductionConfig(Config):
+    pass
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    pass
+
+
+@lru_cache
+def get_config():
+    config = {
+        &quot;production&quot;: ProductionConfig,
+        &quot;development&quot;: DevelopmentConfig,
+        &quot;testing&quot;: TestingConfig,
+    }
+    env = os.getenv(&quot;APP_ENV&quot;, &quot;development&quot;)
+    return config.get(env, DevelopmentConfig)
+</code></pre>
+<p>Then we can create <code>factory.py</code> file inside app directory</p>
+<pre><code class="language-python"># app/factory.py
+
+from typing import List, Type, Union
+
+from flask import Blueprint, Flask
+
+from app.config import Config
+from app.http.route import Route
+
+
+def create_app(
+    app_name: str, config: Type[Config], routes: List[Union[Route, Blueprint]]
+):
+    app = Flask(app_name)
+    app.config.from_object(config)
+
+    for route in routes:
+        if isinstance(route, Blueprint):
+            app.register_blueprint(route)
+        else:
+            app.add_url_rule(
+                route.url_rule, view_func=route.view_func(), methods=route.methods()
+            )
+
+    return app
+
+</code></pre>
+<p>Next we will create basic handler for our application, by creating package <code>views</code> with <code>main_api</code> module</p>
+<pre><code class="language-python"># app/views/main_api.py
+
+from flask import jsonify
+from flask.typing import ResponseReturnValue
+from flask.views import View
+
+
+class MainView(View):
+    def dispatch_request(self) -&gt; ResponseReturnValue:
+        resp = {&quot;message&quot;: &quot;Application running.&quot;}
+        return jsonify(resp)
+
+</code></pre>
+<p>Then we can create basic routing for our application, first create <code>routes</code> package with <code>api</code> module</p>
+<pre><code class="language-python"># app/routes/api.py
+
+from app.http.route import Route
+from app.views.main_api import MainView
+
+api_routes = [
+    Route.get(&quot;/&quot;, MainView),
+]
+
+</code></pre>
+<p>Next update our <code>app</code> package <code>__init__.py</code> scripts to glue all our code before</p>
+<pre><code class="language-python"># app/__init__.py
+
+from app.config import get_config
+from app.factory import create_app
+from app.routes.api import api_routes
+
+app = create_app(&quot;flask-todo&quot;, config=get_config(), routes=api_routes)
+
+</code></pre>
+<p>Next we'll create script to run our application on root of project</p>
+<pre><code class="language-python"># serve.py
+
+from app import app
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+
+</code></pre>
+<p>Run project by invoke command</p>
+<pre><code class="language-bash">(venv)$ python serve.py
+</code></pre>
+<p>Navigate to <a href="http://localhost:5000">http://localhost:5000</a> then you should see</p>
+<pre><code class="language-json">{
+  &quot;message&quot;: &quot;Application running.&quot;
+}
+</code></pre>
+<p>To exclude unwanted files in our codebase repository, we can create <code>.gitignore</code> file containing</p>
+<pre><code class="language-.gitignore">__pycache__/
+venv/
+</code></pre>
+<p>Your final project structure should look like this</p>
+<pre><code>flask-todo
+├── app
+│   ├── config.py
+│   ├── factory.py
+│   ├── http
+│   │   ├── __init__.py
+│   │   └── route.py
+│   ├── __init__.py
+│   ├── routes
+│   │   ├── api.py
+│   │   └── __init__.py
+│   └── views
+│       ├── __init__.py
+│       └── main_api.py
+├── .gitignore
+├── requirements.txt
+└── serve.py
+
+4 directories, 12 files
+</code></pre>
+<p>We can commit our works before continuing to next chapter.</p>
+<pre><code class="language-bash">(venv)$ git add .
+(venv)$ git commit -m &quot;Initialize project structure&quot;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../chapter_1/SUMMARY.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../chapter_1/docker_setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../chapter_1/SUMMARY.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../chapter_1/docker_setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>

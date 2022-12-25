@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>List ToDo API - Test Driven Development with Flask and SQLAlchemy</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../favicon.svg">
+                        <link rel="shortcut icon" href="../favicon.png">
+                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+                <link rel="stylesheet" href="../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../chapter_1/SUMMARY.html"><strong aria-hidden="true">2.</strong> Chapter 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_1/getting_started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../chapter_1/docker_setup.html"><strong aria-hidden="true">2.2.</strong> Docker Setup</a></li><li class="chapter-item expanded "><a href="../chapter_1/postgresql_setup.html"><strong aria-hidden="true">2.3.</strong> PostgreSQL Setup</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_2/SUMMARY.html"><strong aria-hidden="true">3.</strong> Chapter 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/create_todo_api.html"><strong aria-hidden="true">3.1.</strong> Create ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/list_todo_api.html" class="active"><strong aria-hidden="true">3.2.</strong> List ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/detail_todo_api.html"><strong aria-hidden="true">3.3.</strong> Detail ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/update_todo_api.html"><strong aria-hidden="true">3.4.</strong> Update ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/delete_todo_api.html"><strong aria-hidden="true">3.5.</strong> Delete ToDo API</a></li></ol></li><li class="chapter-item expanded "><a href="../review.html"><strong aria-hidden="true">4.</strong> Review</a></li><li class="chapter-item expanded "><a href="../about.html"><strong aria-hidden="true">5.</strong> About</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Test Driven Development with Flask and SQLAlchemy</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="list-todo-api"><a class="header" href="#list-todo-api">List ToDo API</a></h1>
+<p>In this chapter we will create endpoint <code>/api/todos</code> to list all created <code>Task</code> in our database.</p>
+<h2 id="write-the-test"><a class="header" href="#write-the-test">Write the Test</a></h2>
+<p>First let's create test at <code>tests/features/task/list_task_api_test.py</code></p>
+<pre><code class="language-python">from http import HTTPStatus
+from tests.base import BaseAPITestCase
+from app.tasks.models.task import Task
+from app.factory import db
+
+
+class ListTaskAPITest(BaseAPITestCase):
+    def test_list_task_api(self):
+        endpoint = &quot;/api/todos&quot;
+        task_1 = Task(name=&quot;Finish Homework&quot;)
+        task_2 = Task(name=&quot;Clean up closet&quot;)
+        db.session.add_all([task_1, task_2])
+        db.session.commit()
+
+        resp = self.client.get(endpoint)
+
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+
+        resp_json = resp.json or dict()
+        data = resp_json[&quot;data&quot;]
+
+        self.assertEqual(data[0][&quot;name&quot;], &quot;Finish Homework&quot;)
+        self.assertEqual(data[1][&quot;name&quot;], &quot;Clean up closet&quot;)
+
+        Task.query.delete()
+        db.session.commit()
+</code></pre>
+<p>Invoke test by running command</p>
+<pre><code class="language-bash">$ bin/test tests/features/task/list_task_api_test.py
+</code></pre>
+<p>It will return error</p>
+<pre><code>F
+======================================================================
+FAIL: test_list_task_api (tests.features.task.list_task_api_test.ListTaskAPITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/usr/src/app/tests/features/task/list_task_api_test.py&quot;, line 17, in test_list_task_api
+    self.assertEqual(resp.status_code, HTTPStatus.OK)
+AssertionError: 405 != &lt;HTTPStatus.OK: 200&gt;
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (failures=1)
+</code></pre>
+<p>It raise error 405 (HTTP Method Not Allowed) since we not implement our routes yet.
+Let's implement our routes at file <code>app/tasks/views/list_task_api.py</code></p>
+<pre><code class="language-python">from http import HTTPStatus
+
+from flask import jsonify
+from flask.typing import ResponseReturnValue
+from flask.views import View
+
+from app.factory import db
+from app.tasks.models.task import Task
+from app.tasks.schemas.task_schema import TaskSchema
+
+
+class ListTaskAPI(View):
+    def dispatch_request(self) -&gt; ResponseReturnValue:
+        tasks_schema = TaskSchema(many=True)
+        tasks = Task.query.all()
+
+        resp = {
+            &quot;data&quot;: tasks_schema.dump(tasks)
+        }
+        return jsonify(resp), HTTPStatus.OK
+</code></pre>
+<p>Then register it <code>app/routes/api.py</code></p>
+<pre><code class="language-python">from app.http.route import Route
+from app.tasks.views.list_task_api import ListTaskAPI
+from app.tasks.views.create_task_api import CreateTaskAPI
+from app.views.main_api import MainView
+
+api_routes = [
+    Route.get(&quot;/&quot;, MainView),
+    Route.group(&quot;/api&quot;, routes=[
+        Route.post(&quot;/todos&quot;, view=CreateTaskAPI),
+        Route.get(&quot;/todos&quot;, view=ListTaskAPI),
+    ]),
+]
+</code></pre>
+<p>Let's re run the test</p>
+<pre><code class="language-bash">$ bin/test tests/features/task/list_task_api_test.py
+</code></pre>
+<p>It should passed</p>
+<pre><code>.
+----------------------------------------------------------------------
+Ran 1 test in 0.031s
+
+OK
+</code></pre>
+<p>Re-run all test to ensure our new feature not breaking existing feature</p>
+<pre><code class="language-bash">$ bin/test discover -s tests -p '*_test.py'
+</code></pre>
+<p>It should pass all tests</p>
+<pre><code>.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.084s
+
+OK
+</code></pre>
+<p>Your final project structure should be look like this</p>
+<pre><code>flask-todo
+├── app
+│   ├── config.py
+│   ├── factory.py
+│   ├── http
+│   │   ├── __init__.py
+│   │   └── route.py
+│   ├── __init__.py
+│   ├── routes
+│   │   ├── api.py
+│   │   └── __init__.py
+│   ├── tasks
+│   │   ├── __init__.py
+│   │   ├── models
+│   │   │   ├── __init__.py
+│   │   │   └── task.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── task_schema.py
+│   │   └── views
+│   │       ├── create_task_api.py
+│   │       ├── __init__.py
+│   │       └── list_task_api.py
+│   └── views
+│       ├── __init__.py
+│       └── main_api.py
+├── bin
+│   └── test
+├── db
+│   ├── create.sql
+│   └── Dockerfile
+├── docker-compose.yml
+├── Dockerfile
+├── .dockerignore
+├── .env.dev
+├── .gitignore
+├── migrations
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions
+│       └── 213adaf34061_create_tasks_tables.py
+├── requirements.txt
+├── serve.py
+└── tests
+    ├── base.py
+    ├── features
+    │   ├── __init__.py
+    │   └── task
+    │       ├── create_task_api_test.py
+    │       ├── __init__.py
+    │       └── list_task_api_test.py
+    ├── __init__.py
+    └── unit
+        ├── __init__.py
+        └── task
+            ├── __init__.py
+            └── task_model_test.py
+
+17 directories, 41 files
+</code></pre>
+<p>We can commit our works before continuing to next chapter.</p>
+<pre><code class="language-bash">(venv)$ git add .
+(venv)$ git commit -m &quot;Create ListTaskAPI endpoint&quot;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../chapter_2/create_todo_api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../chapter_2/detail_todo_api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../chapter_2/create_todo_api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../chapter_2/detail_todo_api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>

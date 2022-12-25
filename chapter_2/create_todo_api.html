@@ -1,0 +1,693 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Create ToDo API - Test Driven Development with Flask and SQLAlchemy</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../favicon.svg">
+                        <link rel="shortcut icon" href="../favicon.png">
+                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+                <link rel="stylesheet" href="../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../chapter_1/SUMMARY.html"><strong aria-hidden="true">2.</strong> Chapter 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_1/getting_started.html"><strong aria-hidden="true">2.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../chapter_1/docker_setup.html"><strong aria-hidden="true">2.2.</strong> Docker Setup</a></li><li class="chapter-item expanded "><a href="../chapter_1/postgresql_setup.html"><strong aria-hidden="true">2.3.</strong> PostgreSQL Setup</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_2/SUMMARY.html"><strong aria-hidden="true">3.</strong> Chapter 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/create_todo_api.html" class="active"><strong aria-hidden="true">3.1.</strong> Create ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/list_todo_api.html"><strong aria-hidden="true">3.2.</strong> List ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/detail_todo_api.html"><strong aria-hidden="true">3.3.</strong> Detail ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/update_todo_api.html"><strong aria-hidden="true">3.4.</strong> Update ToDo API</a></li><li class="chapter-item expanded "><a href="../chapter_2/delete_todo_api.html"><strong aria-hidden="true">3.5.</strong> Delete ToDo API</a></li></ol></li><li class="chapter-item expanded "><a href="../review.html"><strong aria-hidden="true">4.</strong> Review</a></li><li class="chapter-item expanded "><a href="../about.html"><strong aria-hidden="true">5.</strong> About</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Test Driven Development with Flask and SQLAlchemy</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="create-todo-api-endpoint"><a class="header" href="#create-todo-api-endpoint">Create ToDo API Endpoint</a></h1>
+<p>In this chapter, we will create endpoint <code>/api/todos</code> to create <code>Task</code> based on user needs.</p>
+<h2 id="write-the-test"><a class="header" href="#write-the-test">Write the Test</a></h2>
+<p>Writing test for Flask application actually like writing function, but it have a few rules</p>
+<ul>
+<li>Test file name should starts with <code>test_*.py</code> or end with <code>*_test.py</code>, in this tutorial we will use latest pattern <code>*_test.py</code></li>
+<li>Test method or function should start with <code>test_</code></li>
+<li>In this tutorial we will cover using python standard library for unit testing <code>unittest</code></li>
+</ul>
+<p>Before create test case for our project, we need to define our base class that hold our test app. Let's create <code>tests/base.py</code></p>
+<pre><code class="language-python">import unittest
+from app.factory import create_app
+from app.config import TestingConfig
+from app.routes.api import api_routes
+
+
+class BaseAPITestCase(unittest.TestCase):
+    def setUp(self) -&gt; None:
+        self.app = create_app(&quot;test-app&quot;, config=TestingConfig, routes=api_routes)
+        self.client = self.app.test_client()
+        self.ctx = self.app.app_context()
+        self.ctx.push()
+
+    def tearDown(self) -&gt; None:
+        self.ctx.pop()
+
+</code></pre>
+<p>This class will hold our app with <code>TestingConfig</code>, which connected to our testing specific database <code>todos_testing</code>.</p>
+<p>Let's write our first test by create new file <code>create_task_api_test.py</code> to <code>tests/features/tasks</code> directory.</p>
+<pre><code class="language-python"># tests/features/task/create_task_api_test.py
+
+from http import HTTPStatus
+from tests.base import BaseAPITestCase
+from app.tasks.models.task import Task
+from app.factory import db
+
+
+class CreateTaskAPITest(BaseAPITestCase):
+    def test_create_task(self):
+        endpoint = &quot;/api/todos&quot;
+        json_data = {
+            &quot;name&quot;: &quot;Fix handrawer&quot;,
+        }
+
+        resp = self.client.post(
+            endpoint,
+            json=json_data
+        )
+        self.assertEqual(resp.status_code, HTTPStatus.CREATED)
+
+        tasks = Task.query.all()
+        self.assertEqual(1, len(tasks))
+
+        Task.query.delete()
+        db.session.commit()
+
+</code></pre>
+<p>Ensure your container is up and running by invoke command.</p>
+<pre><code class="language-bash">$ docker compose up -d
+</code></pre>
+<p>Then run the test with python <code>unittest</code> module.</p>
+<pre><code class="language-bash">$ docker compose exec todos python -m unittest tests/features/task/create_task_api.py
+</code></pre>
+<p>It will return failure message</p>
+<pre><code>F
+======================================================================
+FAIL: test_create_task (tests.features.task.create_task_api.CreateTaskAPITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/usr/src/app/tests/features/task/create_task_api.py&quot;, line 20, in test_create_task
+    self.assertEqual(resp.status_code, HTTPStatus.CREATED)
+AssertionError: 404 != &lt;HTTPStatus.CREATED: 201&gt;
+
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+FAILED (failures=1)
+</code></pre>
+<p>This occured because we not define our <code>Task</code> resource yet. To define <code>Task</code> resource, first we need to create table to store the data by creating new migration, first we need to define our models.</p>
+<p>First we need to create test againts our <code>Task</code> model, create file <code>tests/unit/task/task_model_test.py</code></p>
+<pre><code class="language-python">from app.factory import db
+from app.tasks.models.task import Task
+from tests.base import BaseAPITestCase
+
+
+class TaskModelTest(BaseAPITestCase):
+    def test_create_task(self):
+        task = Task(name=&quot;Finish Homework&quot;)
+        db.session.add(task)
+        db.session.commit()
+
+        tasks = Task.query.all()
+        assert len(tasks) == 1
+
+        db.session.delete(task)
+        db.session.commit()
+
+</code></pre>
+<p>Then run the test</p>
+<pre><code class="language-bash">$ docker compose exec todos python -m unittest tests/unit/task/task_model_test.py
+</code></pre>
+<p>It will return failure message</p>
+<pre><code>E
+======================================================================
+ERROR: task_model_test (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: task_model_test
+Traceback (most recent call last):
+  File &quot;/usr/local/lib/python3.8/unittest/loader.py&quot;, line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File &quot;/usr/src/app/tests/unit/task/task_model_test.py&quot;, line 2, in &lt;module&gt;
+    from app.modules.tasks.models import Task
+ImportError: cannot import name 'Task' from 'app.modules.tasks.models' (/usr/src/app/app/modules/tasks/models.py)
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+</code></pre>
+<p>Create <code>Task</code> model to file <code>app/tasks/models/task.py</code></p>
+<pre><code class="language-python"># app/tasks/models/task.py
+
+from app.factory import db
+
+
+class Task(db.Model): # type: ignore
+    __tablename__ = &quot;tasks&quot;
+
+    id = db.Column(db.BigInteger, primary_key=True)
+    name = db.Column(db.String(255))
+    completed = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(
+        db.DateTime,
+        default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp(),
+    )
+</code></pre>
+<p>Apparently our Models is not known to <code>alembic</code> migrations until it loaded to our app via routing registration, we need to create empty Handler for our routing.
+Create file <code>app/tasks/views/create_task_api.py</code> contains basic handler view.</p>
+<pre><code class="language-python"># app/tasks/views/create_task_api.py
+
+from flask import jsonify
+from flask.typing import ResponseReturnValue
+from flask.views import View
+
+from app.tasks.models.task import Task
+
+class CreateTaskAPI(View):
+    def dispatch_request(self) -&gt; ResponseReturnValue:
+        return jsonify({})
+
+</code></pre>
+<p>Then register the handler to our <code>app/routes/api.py</code></p>
+<pre><code class="language-python"># app/routes/api.py
+
+from app.http.route import Route
+from app.tasks.views.create_task_api import CreateTaskAPI
+from app.views.main_api import MainView
+
+api_routes = [
+    Route.get(&quot;/&quot;, MainView),
+    Route.group(&quot;/api&quot;, routes=[
+        Route.post(&quot;/todos&quot;, view=CreateTaskAPI)
+    ]),
+]
+</code></pre>
+<p>In this routing file, we group our <code>/todos</code> endpoint to <code>/api</code> group.</p>
+<p>Generate db migration by running command</p>
+<pre><code class="language-bash">$ docker compose exec todos flask db migrate -m &quot;create tasks table&quot;
+</code></pre>
+<p>This will create new generated file on <code>migrations/versions/{hash_number}_{message}.py</code></p>
+<p>Then we can run our migration againts <code>testing</code> environment with command</p>
+<pre><code class="language-bash">$ docker compose exec -e APP_ENV=testing todos flask db upgrade
+</code></pre>
+<p>When we run our model test againts newly created table, it will return success</p>
+<pre><code class="language-bash">$ docker compose exec todos python -m unittest tests/unit/task/task_model_test.py
+</code></pre>
+<p>It will return message</p>
+<pre><code>.
+----------------------------------------------------------------------
+Ran 1 test in 0.027s
+
+OK
+</code></pre>
+<p>Next try re-running our feature test <code>tests/features/task/create_task_api_test.py</code></p>
+<pre><code class="language-bash">$ docker compose exec todos python -m unittest tests/features/task/create_task_api_test.py
+</code></pre>
+<p>It does not return HTTP Not Found Error (404) anymore but still fail our test</p>
+<pre><code>F
+======================================================================
+FAIL: test_create_task (tests.features.task.create_task_api_test.CreateTaskAPITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/usr/src/app/tests/features/task/create_task_api_test.py&quot;, line 16, in test_create_task
+    self.assertEqual(resp.status_code, HTTPStatus.CREATED)
+AssertionError: 200 != &lt;HTTPStatus.CREATED: 201&gt;
+
+----------------------------------------------------------------------
+Ran 1 test in 0.007s
+
+FAILED (failures=1)
+</code></pre>
+<p>Let's make it green by implementing code at <code>app/tasks/views/create_task_api.py</code></p>
+<pre><code class="language-python"># app/tasks/views/create_task_api.py
+
+from http import HTTPStatus
+
+from flask import jsonify, request
+from flask.typing import ResponseReturnValue
+from flask.views import View
+
+from app.factory import db
+from app.tasks.models.task import Task
+
+
+class CreateTaskAPI(View):
+    def dispatch_request(self) -&gt; ResponseReturnValue:
+        json_data = request.get_json()
+
+        task = Task(**json_data)
+
+        db.session.add(task)
+        db.session.commit()
+        resp = {
+            &quot;msg&quot;: &quot;Created&quot;
+        }
+        return jsonify(resp), HTTPStatus.CREATED
+
+</code></pre>
+<p>Re-run the test <code>tests/features/task/create_task_api_test.py</code></p>
+<pre><code class="language-bash">$ docker compose exec todos python -m unittest tests/features/task/create_task_api_test.py
+</code></pre>
+<p>It will pass</p>
+<pre><code>.
+----------------------------------------------------------------------
+Ran 1 test in 0.031s
+
+OK
+</code></pre>
+<p>But this test only covers happy path only. We need to add tests for following scenario</p>
+<ul>
+<li>Empty json paylod</li>
+<li>Wrong json attributes</li>
+</ul>
+<p>Before adding new tests, lets create helper to help invoke our test. Create file <code>bin/test</code> on our application directory.</p>
+<pre><code>#!/usr/bin/env bash
+
+docker compose exec todos python -m unittest $@
+</code></pre>
+<p>Make file executable with</p>
+<pre><code class="language-bash">$ chmod +x bin/test
+</code></pre>
+<p>Now we can invoke our test with <code>bin/test unit_test.py</code>.</p>
+<p>Let's add test for empty json payload to our test case</p>
+<pre><code class="language-python"># tests/features/task/create_task_api_test.py
+    ...
+    def test_create_task_when_payload_empty(self):
+        endpoint = &quot;/api/todos&quot;
+        json_data = {}
+
+        resp = self.client.post(
+            endpoint,
+            json=json_data
+        )
+        self.assertEqual(resp.status_code, HTTPStatus.BAD_REQUEST)
+
+        Task.query.delete()
+        db.session.commit()
+</code></pre>
+<p>Re-run test with</p>
+<pre><code class="language-bash">$ bin/test tests/features/task/create_task_api_test.py
+</code></pre>
+<p>It will raise error <code>NotNullViolation</code>, because attribute name is not allowed to be null.</p>
+<pre><code>.E
+======================================================================
+ERROR: test_create_task_when_payload_empty (tests.features.task.create_task_api_test.CreateTaskAPITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/usr/local/lib/python3.8/site-packages/sqlalchemy/engine/base.py&quot;, line 1900, in _execute_context
+    self.dialect.do_execute(
+  File &quot;/usr/local/lib/python3.8/site-packages/sqlalchemy/engine/default.py&quot;, line 736, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.NotNullViolation: null value in column &quot;name&quot; of relation &quot;tasks&quot; violates not-null constraint
+</code></pre>
+<p>To validate user request schema, let's add <code>marshmallow</code> package to our application code base by update <code>requirements.txt</code>.</p>
+<pre><code class="language-txt">Flask==2.2.2
+SQLAlchemy==1.4.45
+Flask-SQLAlchemy==3.0.2
+Flask-Migrate==4.0.0
+psycopg2==2.9.5
+marshmallow==3.19.0
+marshmallow-sqlalchemy==0.28.1
+flask-marshmallow==0.14.0
+</code></pre>
+<p>Then rebuild our container with <code>docker compose build</code> command, then update our running container with <code>docker compose up -d</code>.
+After add <code>flask-marshmallow</code> package, then register to our application factory.</p>
+<pre><code class="language-python"># app/factory.py
+
+from typing import List, Type, Union
+
+from flask import Blueprint, Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_marshmallow import Marshmallow
+
+from app.config import Config
+from app.http.route import Route
+
+db = SQLAlchemy()
+migrate = Migrate()
+ma = Marshmallow()
+
+def create_app(
+    app_name: str, config: Type[Config], routes: List[Union[Route, Blueprint]]
+):
+    app = Flask(app_name)
+    app.config.from_object(config)
+
+    db.init_app(app)
+    ma.init_app(app)
+    migrate.init_app(app, db)
+
+    for route in routes:
+        if isinstance(route, Blueprint):
+            app.register_blueprint(route)
+        else:
+            app.add_url_rule(
+                route.url_rule, view_func=route.view_func(), methods=route.methods()
+            )
+
+    return app
+</code></pre>
+<p>Then create our <code>TaskSchema</code> on <code>app/tasks/schemas/task_schema.py</code></p>
+<pre><code class="language-python"># app/tasks/schemas/task_schema.py
+
+from marshmallow import fields, Schema
+
+
+class TaskSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.String(required=True)
+    completed = fields.Boolean()
+    created_at = fields.DateTime(dump_only=True)
+    updated_at = fields.DateTime(dump_only=True)
+
+</code></pre>
+<p>Next implement validation on our view at <code>app/tasks/views/create_task_api.py</code></p>
+<pre><code class="language-python"># app/tasks/views/create_task_api.py
+
+from http import HTTPStatus
+
+from flask import jsonify, make_response, request
+from flask.typing import ResponseReturnValue
+from flask.views import View
+
+from app.factory import db
+from app.tasks.models.task import Task
+from app.tasks.schemas.task_schema import TaskSchema
+
+
+class CreateTaskAPI(View):
+    def dispatch_request(self) -&gt; ResponseReturnValue:
+        task_schema = TaskSchema()
+        json_data = request.get_json() or dict()
+        errors = task_schema.validate(json_data)
+        if errors:
+            return make_response(
+                jsonify(errors=str(errors)),
+                HTTPStatus.BAD_REQUEST
+            )
+
+        task = Task(**json_data)
+
+        db.session.add(task)
+        db.session.commit()
+        resp = {
+            &quot;data&quot;: task_schema.dump(task)
+        }
+        return jsonify(resp), HTTPStatus.CREATED
+
+</code></pre>
+<p>Re-run test with</p>
+<pre><code class="language-bash">$ bin/test tests/features/task/create_task_api_test.py
+</code></pre>
+<p>Test passing</p>
+<pre><code>..
+----------------------------------------------------------------------
+Ran 2 tests in 0.041s
+
+OK
+</code></pre>
+<p>Next let's create test by passing wrong attributes</p>
+<pre><code class="language-python">    ...
+    def test_create_task_when_payload_has_unknown_attribute(self):
+        endpoint = &quot;/api/todos&quot;
+        json_data = {
+            &quot;name&quot;: &quot;Fix new car&quot;,
+            &quot;completed&quot;: False,
+            &quot;other&quot;: &quot;value&quot;,
+        }
+
+        resp = self.client.post(
+            endpoint,
+            json=json_data
+        )
+        self.assertEqual(resp.status_code, HTTPStatus.BAD_REQUEST)
+
+        Task.query.delete()
+        db.session.commit()
+</code></pre>
+<p>Re-run test with</p>
+<pre><code class="language-bash">$ bin/test tests/features/task/create_task_api_test.py
+</code></pre>
+<p>Test passing</p>
+<pre><code>...
+----------------------------------------------------------------------
+Ran 3 tests in 0.052s
+
+OK
+</code></pre>
+<p>After our scenario has been implemented, we can run all our test we've created so far by running command</p>
+<pre><code class="language-bash">$ bin/test discover -s tests -p '*_test.py'
+</code></pre>
+<p>Ensure all test are passed</p>
+<pre><code>....
+----------------------------------------------------------------------
+Ran 4 tests in 0.064s
+
+OK
+</code></pre>
+<p>Your final project structure should be look like this</p>
+<pre><code>flask-todo
+├── app
+│   ├── config.py
+│   ├── factory.py
+│   ├── http
+│   │   ├── __init__.py
+│   │   └── route.py
+│   ├── __init__.py
+│   ├── routes
+│   │   ├── api.py
+│   │   └── __init__.py
+│   ├── tasks
+│   │   ├── __init__.py
+│   │   ├── models
+│   │   │   ├── __init__.py
+│   │   │   └── task.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── task_schema.py
+│   │   └── views
+│   │       ├── create_task_api.py
+│   │       └── __init__.py
+│   └── views
+│       ├── __init__.py
+│       └── main_api.py
+├── bin
+│   └── test
+├── db
+│   ├── create.sql
+│   └── Dockerfile
+├── docker-compose.yml
+├── Dockerfile
+├── .dockerignore
+├── .env.dev
+├── .gitignore
+├── migrations
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions
+│       └── 213adaf34061_create_tasks_tables.py
+├── requirements.txt
+├── serve.py
+└── tests
+    ├── base.py
+    ├── features
+    │   ├── __init__.py
+    │   └── task
+    │       ├── create_task_api_test.py
+    │       └── __init__.py
+    ├── __init__.py
+    └── unit
+        ├── __init__.py
+        └── task
+            ├── __init__.py
+            └── task_model_test.py
+
+17 directories, 39 files
+</code></pre>
+<p>We can commit our works before continuing to next chapter.</p>
+<pre><code class="language-bash">(venv)$ git add .
+(venv)$ git commit -m &quot;Create CreateTaskAPI endpoint&quot;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../chapter_2/SUMMARY.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../chapter_2/list_todo_api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../chapter_2/SUMMARY.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../chapter_2/list_todo_api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>
