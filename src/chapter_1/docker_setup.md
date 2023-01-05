@@ -9,7 +9,7 @@ Let's put our application inside docker container
 Create `Dockerfile` in our project directory
 
 ```Dockerfile
-FROM python:3.8-alpine
+FROM python:3.8-slim
 
 # Set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1

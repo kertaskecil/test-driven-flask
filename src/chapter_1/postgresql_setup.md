@@ -68,14 +68,14 @@ Flask==2.2.2
 SQLAlchemy==1.4.45
 Flask-SQLAlchemy==3.0.2
 Flask-Migrate==4.0.0
-psycopg2==2.9.5
+psycopg2-binary==2.9.5
 
 ```
 
 Before build our image, update main `Dockerfile` to following content
 
 ```Dockerfile
-FROM python:3.8-alpine
+FROM python:3.8-slim
 
 # Set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -84,16 +84,11 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-RUN apk update && \
-    apk add postgresql-libs && \
-    apk add --virtual .build-deps gcc musl-dev postgresql-dev libffi-dev
-
 # Install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 
 RUN pip install -r requirements.txt
-RUN apk --purge del .build-deps
 
 COPY . .
 
