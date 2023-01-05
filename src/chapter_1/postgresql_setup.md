@@ -75,7 +75,7 @@ psycopg2==2.9.5
 Before build our image, update main `Dockerfile` to following content
 
 ```Dockerfile
-FROM python:3.8-alpine
+FROM python:3.8-slim
 
 # Set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1
